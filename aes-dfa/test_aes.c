@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "pico/stdlib.h"
 
 #include "tiny-AES-c/aes.h"
+
+uint8_t keybuf[16];
+uint8_t inpbuf[16];
+uint8_t outbuf[16];
+uint8_t scratchpad[16];
 
 // prints string as hex
 static void phex(uint8_t* str)
@@ -20,7 +26,21 @@ static void phex(uint8_t* str)
     unsigned char i;
     for (i = 0; i < len; ++i)
         printf("%.2x", str[i]);
-    printf("\n");
+}
+
+static void hexin(uint8_t* buf, int len) {
+    char chbuf[2];
+    for (int i = 0; i < 16; ++i) {
+        for (int j = 0; j < 2; ++j) {
+            chbuf[j] = getchar();
+            putchar(chbuf[j]);
+            // if (i == 0 && j == 0 && chbuf[j] == '\n') {
+            //     // don't update anything
+            //     return;
+            // }
+        }
+        *(buf + i) = (uint8_t) strtol(chbuf, NULL, 16);
+    }
 }
 
 static void test_encrypt_ecb_verbose(void)
@@ -107,21 +127,61 @@ int main() {
     gpio_init(TRIGGER_PIN);
     gpio_set_dir(TRIGGER_PIN, GPIO_OUT);
 
+    sleep_ms(2000);
+    
+    // printf("test?\n> ");
+    // uint32_t test;
+    // test = getchar();
+    // printf("test: %x\n", test);
+    
+
+    printf("key (16 hex)?\n> ");
+    hexin(keybuf, 16);
+    printf("\n");
+
+    printf("keybuf: ");
+    phex(keybuf);
+    printf("\n");
+
+    struct AES_ctx ctx;
+    AES_init_ctx(&ctx, keybuf);
+
     while (true) {
+
+        printf("inpbuf (16 hex)?\n> ");
+        hexin(inpbuf, 16);
+        printf("\n");
+
+        printf("inpbuf: ");
+        phex(inpbuf);
+        printf("\n");
+        memcpy(scratchpad, inpbuf, 16);
+        
         gpio_put(LED_PIN, 1);
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        // sleep_ms(100);
+        gpio_put(TRIGGER_PIN, 1);
+
+        AES_ECB_encrypt(&ctx, scratchpad);
+
+        gpio_put(TRIGGER_PIN, 0);
         gpio_put(LED_PIN, 0);
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        test_encrypt_ecb();//_verbose();
-        // sleep_ms(100);
+
+        memcpy(outbuf, scratchpad, 16);
+
+        printf("output: ");
+        phex(outbuf);
+        printf("\n");
+
+        // printf("inpbuf (16 hex) (empty to repeat last input ");
+        // printf("[");
+        // phex(inpbuf);
+        // printf("]");
+        // printf(")?\n> ");
+        // hexin(inpbuf, 16);
+        // printf("\n");
+
+        // printf("inpbuf: ");
+        // phex(inpbuf);
+        // printf("\n");
     }
 
     return 0;

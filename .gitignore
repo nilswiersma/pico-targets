@@ -3,3 +3,5 @@
 **/.vscode
 **/venv
 **/.ipynb_checkpoints
+*log*
+*out*

@@ -13,6 +13,7 @@ add_executable(test_aes
 )
 
 pico_enable_stdio_usb(test_aes 1)
+pico_enable_stdio_uart(test_aes 0)
 pico_add_extra_outputs(test_aes)
 target_link_libraries(test_aes pico_stdlib)
 target_link_libraries(test_aes tiny-aes)
