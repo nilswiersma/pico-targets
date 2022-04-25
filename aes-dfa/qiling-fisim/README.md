@@ -27,3 +27,9 @@ ik08: ebf95b96416c9896f0a2b835c3675a8f
 ik09: 754728b8342bb02ec489081b07ee5294
 ik10: 6b470a7d5f6cba539be5b2489c0be0dc
 ```
+
+Plots of instruction skip timing vs. effect:
+
+![dfa-plot-scatter.png](dfa-plot-scatter.png)
+
+![dfa-plot-heat.png](dfa-plot-heat.png)

@@ -6,7 +6,7 @@ from capstone import Cs
 import subprocess
 import os
 
-BIN = r'/home/nils/projects/picoemp/pico-targets/aes-dfa/build/test_aes.elf'
+BIN = r'../build/test_aes.elf'
 
 nm_out = subprocess.check_output(["arm-none-eabi-nm", BIN]).decode()
 nm_dict = {}
@@ -56,11 +56,11 @@ def simple_disassembler(ql: Qiling, address: int, size: int, user_data) -> None:
 
 def main(user_data, verbose=QL_VERBOSE.DEFAULT):
     # set up command line argv and emulated os root path
-    ROOTFS = r'/home/nils/projects/picoemp/pico-targets/aes-dfa/qiling-fisim/tmp'
+    # ROOTFS = r'tmp'
 
     # instantiate a Qiling object using above arguments and set emulation verbosity level to DEBUG.
     # additional settings are read from profile file
-    ql = Qiling([BIN], ROOTFS,
+    ql = Qiling([BIN], #ROOTFS,
         log_file='sim.out', 
         verbose=verbose)#QL_VERBOSE.OFF)#DEBUG)#DEFAULT)#DEBUG)#, profile=False)
 
