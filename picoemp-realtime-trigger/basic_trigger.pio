@@ -13,11 +13,12 @@
 
 .wrap_target
                                     ; todo: enable autopull
+                                    ; actually mov from osr with autopull is undefined
     pull                side 0b00
     mov x osr           side 0b00   ; read delay into scratch x
     pull                side 0b00
     mov y osr           side 0b00   ; read length into scratch y
-    ; wait TODO side 1    side 0b01   ; wait for trigger input to go high, side-set gpio_trigger_out_debug high
+    ; wait TODO side 1    side 0b10   ; wait for trigger input to go high, side-set gpio_trigger_out_debug high
     nop                 side 0b10   ;      -> nop instead of wait, gpio_trigger_out_debug high
 delay_loop:
     jmp x-- delay_loop  side 0b10   ; count down the delay
