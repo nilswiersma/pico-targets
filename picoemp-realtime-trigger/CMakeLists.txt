@@ -10,7 +10,7 @@ add_executable(pio_trigger_programs
 )
 
 pico_generate_pio_header(pio_trigger_programs ${CMAKE_CURRENT_LIST_DIR}/hello.pio)
-pico_generate_pio_header(pio_trigger_programs ${CMAKE_CURRENT_LIST_DIR}/basic_trigger.pio)
+pico_generate_pio_header(pio_trigger_programs ${CMAKE_CURRENT_LIST_DIR}/trigger_basic.pio)
 
 pico_enable_stdio_usb(pio_trigger_programs 1)
 pico_enable_stdio_uart(pio_trigger_programs 0)

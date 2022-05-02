@@ -4,7 +4,7 @@
 ; SPDX-License-Identifier: BSD-3-Clause
 ;
 
-.program basic_trigger
+.program trigger_basic
 .side_set 2
 
 ; These bits have to be consecutive in the GPIO index too
@@ -28,12 +28,12 @@ pulse_loop:
 .wrap
 
 % c-sdk {
-static inline void basic_trigger_init(PIO pio, uint sm, uint offset, 
+static inline void trigger_basic_init(PIO pio, uint sm, uint offset, 
     uint trigger_in, uint trigger_pulse_go, uint trigger_out_debug) {
 
     // TODO: trigger_in
 
-    pio_sm_config c = basic_trigger_program_get_default_config(offset);
+    pio_sm_config c = trigger_basic_program_get_default_config(offset);
 
     // trigger_out_debug follows trigger_pulse_go sequentually
     // void pio_sm_set_consecutive_pindirs (PIO pio,

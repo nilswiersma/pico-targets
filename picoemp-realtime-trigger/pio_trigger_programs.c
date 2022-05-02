@@ -7,7 +7,7 @@
 #include "hardware/pio.h"
 // pio-asm assembled programs:
 #include "hello.pio.h"
-#include "basic_trigger.pio.h"
+#include "trigger_basic.pio.h"
 
 const uint TRIGGER_PULSE_GO = PICO_DEFAULT_LED_PIN;
 const uint TRIGGER_IN_PIN = 2; // 0/1 is uart
@@ -68,7 +68,7 @@ void hello_pio_program_loop() {
     }
 }
 
-void basic_trigger_program_loop() {
+void trigger_basic_program_loop() {
     // Choose which PIO instance to use (there are two instances)
     PIO pio = pio0;
 
@@ -76,13 +76,13 @@ void basic_trigger_program_loop() {
     // memory. This SDK function will find a location (offset) in the
     // instruction memory where there is enough space for our program. We need
     // to remember this location!
-    uint offset = pio_add_program(pio, &basic_trigger_program);
+    uint offset = pio_add_program(pio, &trigger_basic_program);
 
     // Find a free state machine on our chosen PIO (erroring if there are
     // none). Configure it to run our program, and start it, using the
     // helper function we included in our .pio file.
     uint sm = pio_claim_unused_sm(pio, true);
-    basic_trigger_init(pio, sm, offset, 
+    trigger_basic_init(pio, sm, offset, 
         TRIGGER_IN_PIN, TRIGGER_PULSE_GO, TRIGGER_OUT_PIN);
     
     printf("time scale?\n");
@@ -157,7 +157,7 @@ int main() {
     while (true) {
         printf("program?\n");
         printf(" - [h]ello_io?\n");
-        printf(" - [b]asic_trigger?\n");
+        printf(" - trigger_[b]asic?\n");
         printf(" - tba?\n");
         printf("> ");
         read_line();
@@ -167,8 +167,8 @@ int main() {
             return 0;
         }
 
-        if (strcmp(serial_buffer, "b") == 0 || strcmp(serial_buffer, "basic_trigger") == 0) {
-            basic_trigger_program_loop();
+        if (strcmp(serial_buffer, "b") == 0 || strcmp(serial_buffer, "trigger_basic") == 0) {
+            trigger_basic_program_loop();
             return 0;
         }
         printf("\n");
